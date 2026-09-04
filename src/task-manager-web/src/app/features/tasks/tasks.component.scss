@@ -64,6 +64,7 @@ h1 { margin: 0; color: var(--ink); font-size: 3.4rem; line-height: 1; letter-spa
 .editor textarea { resize: vertical; padding: .75rem; }
 .editor input:focus, .editor textarea:focus, .editor select:focus { outline: 3px solid var(--focus); border-color: var(--accent); }
 .form-row { display: grid; grid-template-columns: 1.2fr .8fr; gap: .75rem; }
+.form-row.create-mode { grid-template-columns: 1fr; }
 .form-row div { display: grid; gap: .55rem; }
 .field-error { color: var(--danger); font-size: .78rem; }
 .editor-actions { display: flex; justify-content: flex-end; gap: .6rem; margin-top: 1rem; }

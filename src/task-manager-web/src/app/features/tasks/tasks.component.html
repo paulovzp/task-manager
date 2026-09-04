@@ -51,7 +51,12 @@
           <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
             <label for="title">Title</label><input id="title" formControlName="title" maxlength="200">
             <label for="description">Description</label><textarea id="description" formControlName="description" rows="5" maxlength="2000"></textarea>
-            <div class="form-row"><div><label for="dueDate">Due date</label><input id="dueDate" type="datetime-local" formControlName="dueDate"></div><div><label for="status">Status</label><select id="status" formControlName="status"><option value="Pending">Pending</option><option value="InProgress">In progress</option><option value="Completed">Completed</option></select></div></div>
+            <div class="form-row" [class.create-mode]="!selectedTask()">
+              <div><label for="dueDate">Due date</label><input id="dueDate" type="datetime-local" formControlName="dueDate"></div>
+              @if (selectedTask()) {
+                <div><label for="status">Status</label><select id="status" formControlName="status"><option value="Pending">Pending</option><option value="InProgress">In progress</option><option value="Completed">Completed</option></select></div>
+              }
+            </div>
             @if (form.touched && form.invalid) { <p class="field-error">Add a title, description, and future due date.</p> }
             <div class="editor-actions"><button class="secondary" type="button" (click)="closeForm()">Cancel</button><button class="primary" type="submit" [disabled]="saving()">{{ saving() ? 'Saving…' : 'Save task' }}</button></div>
           </form>
