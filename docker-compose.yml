@@ -1,0 +1,45 @@
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_PID: Developer
+      MSSQL_SA_PASSWORD: ${MSSQL_SA_PASSWORD:-TaskManager_2026!}
+    ports:
+      - "${SQLSERVER_PORT:-1433}:1433"
+    volumes:
+      - sqlserver-data:/var/opt/mssql
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -C -S localhost -U sa -P \"$$MSSQL_SA_PASSWORD\" -Q \"SELECT 1\" || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 30s
+
+  api:
+    build:
+      context: .
+      dockerfile: src/TaskManager.Api/Dockerfile
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://+:8080
+      ConnectionStrings__TaskManager: Server=sqlserver,1433;Database=TaskManager;User Id=sa;Password=${MSSQL_SA_PASSWORD:-TaskManager_2026!};TrustServerCertificate=True;Encrypt=True
+      Jwt__SigningKey: ${JWT_SIGNING_KEY:-development-only-task-manager-signing-key-2026}
+      SeedData: "true"
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+    ports:
+      - "${API_PORT:-8080}:8080"
+
+  web:
+    build:
+      context: .
+      dockerfile: src/task-manager-web/Dockerfile
+    depends_on:
+      - api
+    ports:
+      - "${WEB_PORT:-4200}:80"
+
+volumes:
+  sqlserver-data:

@@ -1,0 +1,24 @@
+.auth-page { min-height: 100dvh; display: grid; grid-template-columns: minmax(20rem, .9fr) minmax(28rem, 1.1fr); }
+.auth-intro { background: var(--ink); color: var(--surface); padding: clamp(2rem, 6vw, 5.5rem); display: flex; flex-direction: column; justify-content: space-between; min-height: 100dvh; }
+.brand { color: inherit; text-decoration: none; font-size: 1.1rem; font-weight: 750; letter-spacing: -.02em; }
+.eyebrow { color: var(--accent-soft); font-size: .75rem; font-weight: 750; letter-spacing: .12em; text-transform: uppercase; }
+h1 { max-width: 10ch; margin: .75rem 0 1.25rem; font-size: clamp(3rem, 6vw, 5.6rem); line-height: .94; letter-spacing: -.065em; }
+.intro-copy { max-width: 34rem; color: var(--ink-muted); font-size: 1.05rem; line-height: 1.7; }
+.demo-note { color: var(--ink-muted); font-size: .9rem; line-height: 1.6; }
+.demo-note strong { color: var(--surface); }
+.auth-panel { display: grid; place-items: center; padding: 2rem; background: var(--canvas); }
+.form-wrap { width: min(100%, 27rem); }
+h2 { margin: .5rem 0 2rem; font-size: 2rem; letter-spacing: -.045em; }
+form { display: grid; gap: .55rem; }
+label { margin-top: .75rem; font-size: .86rem; font-weight: 700; }
+input { width: 100%; height: 3rem; border: 1px solid var(--line); border-radius: .7rem; padding: 0 .9rem; background: var(--surface); color: var(--text); }
+input:focus { outline: 3px solid var(--focus); border-color: var(--accent); }
+.primary { margin-top: 1.1rem; min-height: 3rem; border: 0; border-radius: .7rem; background: var(--accent); color: var(--surface); font-weight: 750; cursor: pointer; transition: transform 180ms cubic-bezier(.16,1,.3,1), background 180ms; }
+.primary:hover:not(:disabled) { background: var(--accent-hover); transform: translateY(-1px); }
+.primary:disabled { opacity: .55; cursor: wait; }
+.field-error, .form-error { color: var(--danger); font-size: .83rem; }
+.form-error { padding: .75rem; border: 1px solid var(--danger-line); border-radius: .65rem; background: var(--danger-soft); }
+.hint, .switch-link { color: var(--muted); font-size: .84rem; line-height: 1.5; }
+.switch-link { margin-top: 1.5rem; }
+.switch-link a { color: var(--accent); font-weight: 700; }
+@media (max-width: 800px) { .auth-page { grid-template-columns: 1fr; } .auth-intro { min-height: auto; gap: 4rem; } .demo-note { display: none; } .auth-panel { min-height: 58dvh; } h1 { font-size: 3.4rem; } }

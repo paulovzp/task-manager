@@ -1,0 +1,20 @@
+<main class="auth-page">
+  <section class="auth-intro" aria-labelledby="product-title">
+    <a class="brand" routerLink="/">Taskflow</a>
+    <div><p class="eyebrow">A calmer way to finish work</p><h1 id="product-title">Keep today focused.</h1><p class="intro-copy">Capture the work that matters, see every deadline, and move tasks forward without the clutter.</p></div>
+    <p class="demo-note"><strong>Demo ready</strong><br>Credentials are already filled in.</p>
+  </section>
+  <section class="auth-panel" aria-labelledby="login-title">
+    <div class="form-wrap">
+      <p class="eyebrow">Welcome back</p><h2 id="login-title">Sign in to your workspace</h2>
+      <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+        <label for="email">Email</label><input id="email" type="email" formControlName="email" autocomplete="email">
+        @if (form.controls.email.touched && form.controls.email.invalid) { <p class="field-error">Enter a valid email address.</p> }
+        <label for="password">Password</label><input id="password" type="password" formControlName="password" autocomplete="current-password">
+        @if (error()) { <p class="form-error" role="alert">{{ error() }}</p> }
+        <button class="primary" type="submit" [disabled]="busy()">{{ busy() ? 'Signing in…' : 'Sign in' }}</button>
+      </form>
+      <p class="switch-link">New here? <a routerLink="/register">Create an account</a></p>
+    </div>
+  </section>
+</main>

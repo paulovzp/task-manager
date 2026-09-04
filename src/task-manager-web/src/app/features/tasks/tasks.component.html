@@ -1,0 +1,62 @@
+<div class="app-shell">
+  <header class="topbar">
+    <a class="brand" href="/tasks">Taskflow</a>
+    <div class="account"><span class="avatar">{{ auth.user()?.name?.charAt(0) || 'U' }}</span><span class="account-copy"><strong>{{ auth.user()?.name || 'Your workspace' }}</strong><small>{{ auth.user()?.email }}</small></span><button class="text-button" type="button" (click)="logout()">Sign out</button></div>
+  </header>
+
+  <main class="workspace">
+    <section class="page-heading">
+      <div><p class="eyebrow">My workspace</p><h1>Tasks</h1><p>Turn the next few days into a plan you can trust.</p></div>
+      <button class="primary" type="button" (click)="openCreate()"><span aria-hidden="true">＋</span> New task</button>
+    </section>
+
+    <section class="summary" aria-label="Task summary">
+      <div><strong>{{ tasks().length }}</strong><span>Total tasks</span></div>
+      <div><strong>{{ dueSoonCount() }}</strong><span>Due in 3 days</span></div>
+      <div><strong>{{ completedCount() }}</strong><span>Completed</span></div>
+    </section>
+
+    <nav class="filters" aria-label="Filter tasks">
+      @for (option of ['All', 'Pending', 'InProgress', 'Completed']; track option) {
+        <button type="button" [class.active]="filter() === option" (click)="setFilter($any(option))">{{ option === 'InProgress' ? 'In progress' : option }}</button>
+      }
+    </nav>
+
+    @if (error()) { <p class="error-banner" role="alert">{{ error() }} <button type="button" (click)="loadTasks()">Try again</button></p> }
+
+    <section class="task-region" [class.with-editor]="formVisible()">
+      <div class="task-list" aria-live="polite">
+        @if (loading()) {
+          @for (row of [1, 2, 3]; track row) { <div class="skeleton"><span></span><span></span></div> }
+        } @else if (filteredTasks().length === 0) {
+          <div class="empty"><span class="empty-mark" aria-hidden="true">✓</span><h2>{{ tasks().length ? 'Nothing in this view' : 'Your list is clear' }}</h2><p>{{ tasks().length ? 'Choose another status to see your tasks.' : 'Create a task and give your next step a deadline.' }}</p>@if (!tasks().length) { <button class="secondary" type="button" (click)="openCreate()">Create the first task</button> }</div>
+        } @else {
+          @for (task of filteredTasks(); track task.id) {
+            <article class="task-row">
+              <button class="task-main" type="button" (click)="openEdit(task)" [attr.aria-label]="'Edit ' + task.title">
+                <span class="status-dot" [class.inprogress]="task.status === 'InProgress'" [class.completed]="task.status === 'Completed'"></span>
+                <span class="task-copy"><strong>{{ task.title }}</strong><small>{{ task.description }}</small></span>
+              </button>
+              <time [attr.datetime]="task.dueDate">{{ task.dueDate | date:'MMM d, y' }}</time>
+              <span class="status" [class.inprogress]="task.status === 'InProgress'" [class.completed]="task.status === 'Completed'">{{ task.status === 'InProgress' ? 'In progress' : task.status }}</span>
+              <button class="icon-button" type="button" (click)="deleteTask(task)" [attr.aria-label]="'Delete ' + task.title">×</button>
+            </article>
+          }
+        }
+      </div>
+
+      @if (formVisible()) {
+        <aside class="editor" aria-labelledby="editor-title">
+          <div class="editor-heading"><div><p class="eyebrow">{{ selectedTask() ? 'Update task' : 'New task' }}</p><h2 id="editor-title">{{ selectedTask() ? 'Keep it current' : 'Define the next step' }}</h2></div><button class="icon-button" type="button" (click)="closeForm()" aria-label="Close task editor">×</button></div>
+          <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+            <label for="title">Title</label><input id="title" formControlName="title" maxlength="200">
+            <label for="description">Description</label><textarea id="description" formControlName="description" rows="5" maxlength="2000"></textarea>
+            <div class="form-row"><div><label for="dueDate">Due date</label><input id="dueDate" type="datetime-local" formControlName="dueDate"></div><div><label for="status">Status</label><select id="status" formControlName="status"><option value="Pending">Pending</option><option value="InProgress">In progress</option><option value="Completed">Completed</option></select></div></div>
+            @if (form.touched && form.invalid) { <p class="field-error">Add a title, description, and future due date.</p> }
+            <div class="editor-actions"><button class="secondary" type="button" (click)="closeForm()">Cancel</button><button class="primary" type="submit" [disabled]="saving()">{{ saving() ? 'Saving…' : 'Save task' }}</button></div>
+          </form>
+        </aside>
+      }
+    </section>
+  </main>
+</div>
