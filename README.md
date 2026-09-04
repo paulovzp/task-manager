@@ -102,7 +102,3 @@ See [architecture.md](docs/architecture.md) for project responsibilities, depend
 ## Generative AI record
 
 See [genai.md](docs/genai.md) for the prompt, representative generated code, validation process, corrections, and edge cases requested by the exercise.
-
-## Presentation
-
-See [presentation.md](docs/presentation.md) for a concise interview walkthrough and demonstration sequence.
