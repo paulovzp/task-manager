@@ -50,4 +50,26 @@ describe('TasksComponent', () => {
 
     expect(fixture.nativeElement.querySelector('#status')).not.toBeNull();
   });
+
+  it('does not allow a completed task to open in the editor', () => {
+    const fixture = TestBed.createComponent(TasksComponent);
+    const component = fixture.componentInstance;
+    fixture.detectChanges();
+    component.loading.set(false);
+    component.tasks.set([{
+      id: 'task-2',
+      ownerId: 'user-1',
+      title: 'Completed task',
+      description: 'This work is finished',
+      dueDate: '2026-09-05T12:00:00.000Z',
+      status: 'Completed',
+    }]);
+    fixture.detectChanges();
+
+    const editButton = fixture.nativeElement.querySelector('.task-main') as HTMLButtonElement;
+
+    expect(editButton.disabled).toBe(true);
+    editButton.click();
+    expect(component.formVisible()).toBe(false);
+  });
 });

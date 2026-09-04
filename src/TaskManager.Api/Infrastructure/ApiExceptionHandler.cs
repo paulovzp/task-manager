@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using TaskManager.Application.Common;
+using TaskManager.Domain.Tasks;
 
 namespace TaskManager.Api.Infrastructure;
 
@@ -16,6 +17,8 @@ public sealed class ApiExceptionHandler(ILogger<ApiExceptionHandler> logger) : I
         var (status, title) = exception switch
         {
             TaskNotFoundException => (StatusCodes.Status404NotFound, "Task not found"),
+            CompletedTaskCannotBeChangedException =>
+                (StatusCodes.Status409Conflict, "Completed task cannot be changed"),
             InvalidCredentialsException => (StatusCodes.Status401Unauthorized, "Invalid credentials"),
             IdentityOperationException => (StatusCodes.Status400BadRequest, "Registration failed"),
             ArgumentException => (StatusCodes.Status400BadRequest, "Validation failed"),

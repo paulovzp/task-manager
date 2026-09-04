@@ -33,7 +33,7 @@
         } @else {
           @for (task of filteredTasks(); track task.id) {
             <article class="task-row">
-              <button class="task-main" type="button" (click)="openEdit(task)" [attr.aria-label]="'Edit ' + task.title">
+              <button class="task-main" type="button" (click)="openEdit(task)" [disabled]="task.status === 'Completed'" [attr.aria-label]="task.status === 'Completed' ? task.title + ' is completed and cannot be edited' : 'Edit ' + task.title" [attr.title]="task.status === 'Completed' ? 'Completed tasks cannot be edited' : null">
                 <span class="status-dot" [class.inprogress]="task.status === 'InProgress'" [class.completed]="task.status === 'Completed'"></span>
                 <span class="task-copy"><strong>{{ task.title }}</strong><small>{{ task.description }}</small></span>
               </button>

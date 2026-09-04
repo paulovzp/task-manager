@@ -63,6 +63,8 @@ export class TasksComponent implements OnInit {
   }
 
   openEdit(task: TaskItem): void {
+    if (task.status === 'Completed') return;
+
     this.selectedTask.set(task);
     this.form.reset({
       title: task.title,

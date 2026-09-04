@@ -57,6 +57,16 @@ public sealed class TaskCrudTests : IClassFixture<TaskManagerApiFactory>
         });
         updateResponse.EnsureSuccessStatusCode();
 
+        // Act and assert: completed tasks are immutable
+        var completedTaskUpdateResponse = await _client.PutAsJsonAsync($"/api/tasks/{taskId}", new
+        {
+            title = "Attempted change",
+            description = "Completed work must remain unchanged.",
+            status = "InProgress",
+            dueDate = DateTimeOffset.UtcNow.AddDays(4),
+        });
+        Assert.Equal(HttpStatusCode.Conflict, completedTaskUpdateResponse.StatusCode);
+
         // Act and assert: delete
         var deleteResponse = await _client.DeleteAsync($"/api/tasks/{taskId}");
         Assert.Equal(HttpStatusCode.NoContent, deleteResponse.StatusCode);

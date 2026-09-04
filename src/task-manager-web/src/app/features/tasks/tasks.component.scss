@@ -35,6 +35,8 @@ h1 { margin: 0; color: var(--ink); font-size: 3.4rem; line-height: 1; letter-spa
 .task-list { border-top: 1px solid var(--line); }
 .task-row { min-height: 5.2rem; display: grid; grid-template-columns: minmax(0, 1fr) 7.5rem 7rem 2rem; align-items: center; gap: 1rem; border-bottom: 1px solid var(--line); }
 .task-main { min-width: 0; display: flex; align-items: center; gap: .85rem; padding: 1rem 0; border: 0; background: transparent; text-align: left; cursor: pointer; }
+.task-main:disabled { color: inherit; cursor: not-allowed; }
+.task-main:disabled .task-copy { opacity: .62; }
 .status-dot { width: .62rem; height: .62rem; flex: 0 0 auto; border-radius: 50%; background: var(--warning); box-shadow: 0 0 0 4px var(--warning-soft); }
 .status-dot.inprogress { background: var(--accent); box-shadow: 0 0 0 4px var(--accent-soft); }
 .status-dot.completed { background: var(--success); box-shadow: 0 0 0 4px var(--success-soft); }

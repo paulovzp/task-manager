@@ -17,6 +17,7 @@ The application allows an authenticated user to manage only their own tasks.
 - A title is required and cannot exceed 200 characters.
 - A description cannot exceed 2,000 characters.
 - A new task item starts in the `Pending` status.
+- A completed task item is immutable: its details and lifecycle status cannot be changed.
 - Temporal due-date validation belongs to the application use case so it can
   compare against an injected clock without introducing ambient time into the domain entity.
 

@@ -5,6 +5,38 @@ namespace TaskManager.Domain.Tests.Tasks;
 public sealed class TaskItemTests
 {
     [Fact]
+    public void ChangeStatus_CompletedTask_ThrowsCompletedTaskCannotBeChangedException()
+    {
+        var taskItem = TaskItem.Create(
+            Guid.Parse("9b9df3aa-ef15-4384-a66c-60488c752e0e"),
+            "Completed task",
+            "This work is finished",
+            new DateTimeOffset(2026, 9, 10, 18, 0, 0, TimeSpan.Zero));
+        taskItem.ChangeStatus(TaskItemStatus.Completed);
+
+        Assert.Throws<CompletedTaskCannotBeChangedException>(() =>
+            taskItem.ChangeStatus(TaskItemStatus.InProgress));
+    }
+
+    [Fact]
+    public void UpdateDetails_CompletedTask_ThrowsCompletedTaskCannotBeChangedException()
+    {
+        var taskItem = TaskItem.Create(
+            Guid.Parse("9b9df3aa-ef15-4384-a66c-60488c752e0e"),
+            "Completed task",
+            "This work is finished",
+            new DateTimeOffset(2026, 9, 10, 18, 0, 0, TimeSpan.Zero));
+        taskItem.ChangeStatus(TaskItemStatus.Completed);
+
+        var exception = Assert.Throws<CompletedTaskCannotBeChangedException>(() => taskItem.UpdateDetails(
+            "Changed title",
+            "Changed description",
+            new DateTimeOffset(2026, 9, 12, 18, 0, 0, TimeSpan.Zero)));
+
+        Assert.Equal("Completed tasks cannot be changed.", exception.Message);
+    }
+
+    [Fact]
     public void UpdateDetails_DescriptionLongerThan2000Characters_ThrowsArgumentException()
     {
         var taskItem = TaskItem.Create(

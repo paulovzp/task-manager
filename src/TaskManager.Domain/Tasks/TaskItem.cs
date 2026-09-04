@@ -60,6 +60,7 @@ public sealed class TaskItem
     /// <param name="status">The new task status.</param>
     public void ChangeStatus(TaskItemStatus status)
     {
+        EnsureCanBeChanged();
         Status = status;
     }
 
@@ -72,6 +73,8 @@ public sealed class TaskItem
     /// <exception cref="ArgumentException">Thrown when <paramref name="title"/> is missing.</exception>
     public void UpdateDetails(string title, string description, DateTimeOffset dueDate)
     {
+        EnsureCanBeChanged();
+
         if (string.IsNullOrWhiteSpace(title))
         {
             throw new ArgumentException("A task title is required.", nameof(title));
@@ -94,6 +97,14 @@ public sealed class TaskItem
         Title = title;
         Description = description;
         DueDate = dueDate;
+    }
+
+    private void EnsureCanBeChanged()
+    {
+        if (Status == TaskItemStatus.Completed)
+        {
+            throw new CompletedTaskCannotBeChangedException();
+        }
     }
 
     /// <summary>
